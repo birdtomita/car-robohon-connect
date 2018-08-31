@@ -1,0 +1,392 @@
+<!doctype html>
+<html>
+<head>
+<title>team C</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+<style type="text/css"><!--
+html,body{
+    overflow: hidden;
+    height: 100%;
+}
+body{
+    background-image: url(./steering.png);
+    background-color:#333333;
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: top center;
+}
+img#handle1 {
+		transition-duration:0.1s;
+		opacity:0.5;
+        /*
+		position:absolute;
+		top:0px;
+		left:0px;
+        */
+        width:320px;
+        height:320px;
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
+}
+div#img_base {
+		-webkit-perspective: 320px;
+		perspective: 320px;
+		position:relative;
+		width:100%;
+}
+.judge-status {
+  position: absolute;
+  -webkit-animation: show 1s;
+  margin: auto 0;
+  width: 100%;
+  opacity:0;
+  font-size: 60px;
+  color: #FF99FF;
+  text-align: center;
+}
+
+.judge-great {
+  position: absolute;
+  -webkit-animation: great 2s;
+  margin: auto 0;
+  width: 100%;
+  opacity:0;
+  font-family: 'Century';
+  color: #FF8C00;
+  text-align: center;
+}
+
+.judge-good {
+  position: absolute;
+  -webkit-animation: show 1s;
+  margin: auto 0;
+  width: 100%;
+  opacity:0;
+  font-family: 'Century';
+  font-size: 60px;
+  color: #CC33FF;
+  text-align: center;
+}
+
+.judge-bad {
+  position: absolute;
+  -webkit-animation: show 1s;
+  margin: auto 0;
+  width: 100%;
+  opacity:0;
+  font-family: 'Century';
+  font-size: 50px;
+  color: #0033CC;
+  text-align: center;
+}
+
+@-webkit-keyframes great {
+  0% {opacity:1; font-size:30px}
+  20% {font-size:65px}
+  70% {opacity:0.7;}
+  100% {opacity:0; font-size: 120px}
+}
+
+@-webkit-keyframes show {
+  50% {opacity:1;}
+  100% {opacity:0;}
+}
+#judge{
+    position: absolute;
+	top: 100px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin:auto;
+    text-align: center;
+}
+#debug{
+    position: absolute;
+    top:0;
+    left:0;
+}
+#sleepButton{
+    position: absolute;
+    bottom:0;
+    right: 0;
+}
+#soundButton{
+    position: absolute;
+    bottom:0;
+    left: 0;
+}
+#messageView{
+    width:400px;
+    height:40px;
+    font-size:20px;
+    line-height: 40px;
+    margin: 10px auto;
+    background-color: #222;
+    border-radius: 10px;
+    text-align: center;
+    color:lightgray;
+    font-weight: bold;
+    border:2px solid #888;
+}
+#debug{
+    color:white;
+    background-color:#222;
+    opacity: 0;
+    width:auto;
+    height:auto;
+    border-radius: 8px;
+    margin:8px;
+    padding: 8px;
+    top:60px;
+}
+
+#fireButton{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+}
+
+.button {
+	padding: 0;
+	margin: 50px 10px;
+	position: relative;
+	display: block;
+	width: 100px;
+	height: 100px;
+  	border: 1px solid rgba(0,0,0,0.5);
+	border-radius: 100px;
+	background: -moz-radial-gradient(50% 80%, circle, #00D1F2, #0055C1);
+	background: -webkit-radial-gradient(50% 80%, circle, #00D1F2, #0055C1);
+	background: radial-gradient(50% 80%, circle, #00D1F2, #0055C1);
+	box-shadow: 0 2px 6px rgba(0,0,0,0.5),
+		0 2px 10px rgba(0,100,255, 0.7),
+		inset 0 0 10px rgba(0,0,150,0.6);
+	-webkit-box-reflect: 
+		below -90px -webkit-gradient(linear, right top, left top, from(rgba(0,0,0,0.1)), to(rgba(0,0,0,0)));
+}
+.button .highlight {
+    position: absolute;
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+background-image: -webkit-linear-gradient(rgba(250, 250, 255, 1) 0%, rgba(250, 250, 255, 0.7) 10%, rgba(250, 250, 255, 0) 100%);
+background-image: -o-linear-gradient(rgba(250, 250, 255, 1) 0%, rgba(250, 250, 255, 0.7) 10%, rgba(250, 250, 255, 0) 100%);
+background-image: linear-gradient(rgba(250, 250, 255, 1) 0%, rgba(250, 250, 255, 0.7) 10%, rgba(250, 250, 255, 0) 100%);
+    z-index: 3;
+    top: -1px;
+    -moz-transform: scale(0.8, 0.6); 
+}
+
+/* ステップ10. テキストを追加する */
+.button .text {
+	display: block;
+	color: rgba(255, 255, 255, 0.9);
+	font-family: 'Telex', sans-serif;
+	font-weight: 700;
+	font-size: 24pt;
+	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5) ,
+		0px 0px 4px rgba(255, 255, 255, 1);
+	position: absolute;
+	text-align: center;
+	top: 32px;
+	width: 100px;
+	height: 100px;
+	z-index: 1;
+}
+#scoreView{
+    position:absolute;
+    top:8px;
+    margin:10px;
+    right:8px;
+    width:80px;
+    height:40px;
+    border-radius: 8px;
+    background-color: #222;
+    color:lightcoral;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    font-size: 32px;
+    font-style: italic;
+}
+--></style>
+
+<!-- vehicle api 必須 : ここから-->
+      <!--
+	  <script src="http://52.193.60.25:3000/socket.io/socket.io.js"></script>
+      <script src="http://52.193.60.25:3000/www/js/vehicleAPI.js"></script>
+      <script src="http://52.193.60.25:3000/www/js/vehicleAPI-client.js"></script>
+	  -->
+      <script src="http://13.112.91.95:3000/socket.io/socket.io.js"></script>
+      <script src="http://13.112.91.95:3000/www/js/vehicleAPI.js"></script>
+      <script src="http://13.112.91.95:3000/www/js/vehicleAPI-client.js"></script>
+      <script>
+        var roomID = "atsutoms";
+		var audioGreat;
+		var audioGood;
+		var audioBad;
+		var audioFire;
+		var misssion = 0;
+        window.onload = function () {
+          document.getElementById("WSRoomID").innerHTML = roomID;
+          var msg = {"roomID":roomID, "data":"NOT REQUIRED"};
+          socket.emit('joinRoom', JSON.stringify(msg));
+		  audioGreat = document.getElementById('greatsound');
+		  audioGood = document.getElementById('goodsound');
+		  audioBad = document.getElementById('badsound');
+		  audioFire = document.getElementById('firesound');
+        }
+      </script>
+<!-- vehicle api 必須 : ここまで -->
+
+<script type="text/javascript"><!--
+ //デバイスの傾き
+ var device_angle = 0;
+ var score = 0;
+
+ //加速度の取得時
+ function iosHandleOrientation(event) {
+      	var orientData = event.accelerationIncludingGravity;
+		var rotation = event.rotationRate;
+		var acceleration = event.acceleration;
+      	var accel_scale = 30.0;
+      	var filter_val = 0.1;
+      	 
+        var d = document.getElementById("display");
+        d.innerHTML = "<p> x = " + orientData.x + "<br />y = " + orientData.y + "</p>";
+        //d.innerHTML = "<p> x = " + rotation.alpha + "<br />y = " + rotation.beta + "</p>";
+        //d.innerHTML = "<p> x = " + acceleration.x + "<br />y = " + acceleration.y + "</p>";
+        //d.innerHTML = "<p> x = " + event.alpha + "<br />y = " + event.beta + "</p>";
+        //d.innerHTML = "<p> x = " + event.gamma + "<br />y = " + event.beta + "</p>";
+
+		//デバイス角度を保存
+		var setting = orientData.y;//通常safariの場合:-orientData.x、横ブラウザの場合:orientData.y
+		device_angle = setting*8;//角度に変換
+      }
+
+//加速度リスナーを設定
+window.addEventListener("devicemotion", iosHandleOrientation, true);
+
+// VehicleAPIのハンドル角度購読
+var steerSub = navigator.vehicle.steeringWheel.subscribe(function(obj) {
+	document.getElementById("steeringWheel").innerHTML = obj.angle;
+
+  	//回転
+	var r = document.getElementById("handle1");
+	//ハンドルの回りすぎを防ぐため2で割る
+	var deg = -obj.angle/2+device_angle;
+ 	r.style.transform = "rotate("+ deg +"deg)";
+
+	//Good判定
+	document.getElementById("judge").innerHTML = "<div>"+judge(deg,0)+"</div>";
+});
+
+// 加速度の購読
+var accelSub = navigator.vehicle.acceleration.subscribe(function(obj) {
+//          document.getElementById("acceleration-x").innerHTML = obj.x;
+//          document.getElementById("acceleration-y").innerHTML = obj.y;
+          if(Math.abs(obj.x) > 0.2){
+                          location.href = "say://alertx";
+          }
+          if(Math.abs(obj.y) > 0.2){
+                          location.href = "say://alertx";
+          }
+        });
+
+// 酔った
+var wow = function(){
+        location.href = "say://help";
+    }
+
+var memeSubId = navigator.vehicle.meme.subscribe(function(meme) {
+          document.getElementById("MemeAttentiveness").innerHTML    = meme.attentiveness;
+          document.getElementById("MemeAwakeness").innerHTML        = meme.awakeness;
+        });
+
+var cntGreat = 0;
+var cntGood = 0;
+var cntBad = 0;
+var cntJudge = 0;
+
+function judge(x,y) {
+  var diff = Math.abs(x-y);
+
+  cntJudge +=1;
+  //間引く
+  if(cntJudge%4!=0){
+		  return "";
+	  }
+
+  if (diff < 1) {
+      cntGreat++;
+      score +=3;
+      document.getElementById("scoreView").innerHTML=score;
+	  audioGreat.play();
+      return "<div class='judge-great'>Great</div>";
+  }else if(diff < 10) {
+      cntGood++;
+      score +=1;
+      document.getElementById("scoreView").innerHTML=score;
+	  audioGood.play();
+      return "<div class='judge-good'>Good</div>";
+  }else{
+      cntBad++;
+	  audioBad.play();
+      return "<div class='judge-bad'>Bad</div>";
+  }
+}
+
+function sleep() {
+    document.getElementById("messageView").innerHTML="ミッション：眠いドライバーを助けろ！";
+	mission = 1;
+}
+function sound() {
+		//一度ユーザタッチで再生した音しかJSから再生できない？
+	  	audioBad.play();
+		audioGood.play();
+	    audioGreat.play();
+}
+
+    var fire = function(){
+        console.log("FIRE");
+
+	    audioFire.play();
+		if (mission == 1){
+            location.href = "say://sleepy";
+            document.getElementById("messageView").innerHTML="";
+            score +=1;
+            document.getElementById("scoreView").innerHTML=score;
+        }
+    }
+--></script>
+</head>
+<body>
+<div id="messageView"></div>
+<div id="img_base">
+<img id="handle1" src="./swheel.png">
+</div>
+<div class="judge-status">Good</div>
+<div id="debug">
+    <div>Room ID:<span id="WSRoomID"></span></div>
+    <div>デバイス角度:<span = id="display">x = 0<br/> y = 0</span></div>
+    <div>Vehicle APIからのハンドル角度:<span id="steeringWheel">0</span></div>
+    <div><span class="clsLabel">awakeness:</span>     <span id="MemeAwakeness"> </span> [---]</div>
+    <div><span class="clsLabel">attentiveness:</span> <span id="MemeAttentiveness"> </span> [---]</div>
+</div>
+<div id="judge"></div>
+
+<div id="sleepButton"><a href="#" onclick="sleep()">sleep</a></div>
+<div id="soundButton"><a href="#" onclick="sound()">sound</a></div>
+<div id="fireButton"><a href="#" class="button" onclick="fire()"><span class="text">FIRE</span><span class="highlight"></span></a></div>
+<div id="scoreView">0</div>
+
+<audio id="greatsound" src="button15.mp3"></audio>
+<audio id="goodsound" src="decision22.mp3"></audio>
+<audio id="badsound" src="button56.mp3"></audio>
+<div id="helpButton" style="display:block;position:absolute;bottom:20px;left:20px;color:white;font-size:40px;font-weight:bold;border:4px solid gray;padding:4px"><a href="#" onclick="wow()" style="color:white">HELP!</a></div>
+<audio id="firesound" src="se_maoudamashii_explosion06.mp3"></audio>
+</body>
+</html>
